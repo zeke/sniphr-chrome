@@ -1,0 +1,13 @@
+{
+  "name": "Sniph",
+  "version": "0.1",
+  "description": "Selection snip sniffer!",
+  "permissions": [
+    "http://sniph.heroku.com/"
+  ],
+  "content_scripts": [ {
+     "all_frames": true,
+     "js": ["content.js"],
+     "matches": [ "<all_urls>" ]
+  } ]
+}
