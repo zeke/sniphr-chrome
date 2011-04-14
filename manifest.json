@@ -1,13 +1,21 @@
 {
-  "name": "Sniph",
+  "name": "Sniphr",
   "version": "0.1",
-  "description": "Selection snip sniffer!",
+  "description": "I'm up in your chromes, sniffin' your snips!",
   "permissions": [
-    "http://sniph.heroku.com/"
+    "http://local.dev/",
+    "http://sniph.heroku.com/",
+    "http://sniph.com/",
+    "http://www.sniph.com/"
   ],
+  "background_page" : "background.html",
+  "browser_action": {
+    "default_icon": "nose.gif"
+  },
+	"options_page": "options.html",
   "content_scripts": [ {
      "all_frames": true,
-     "js": ["content.js"],
+     "js": ["jquery-1.5.1.min.js", "content.js"],
      "matches": [ "<all_urls>" ]
   } ]
 }

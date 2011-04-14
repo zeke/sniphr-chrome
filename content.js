@@ -1,13 +1,40 @@
-console.log('s n i p h');
+//  Keep track of recents so as not to re-save
+recentSniphs = [];
 
-function injectJs(link) {
-	var scr = document.createElement("script");
-	scr.type="text/javascript";
-	scr.src=link;
-	(document.head || document.body || document.documentElement).appendChild(scr);
+function onSniphSave(data) {
+	if (data == null) {
+		console.log('error: bad response from sniphr.com');
+	} else {
+		console.log('Sniph saved!');
+		console.log(data);		
+	}
 }
 
-injectJs('http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js');
-injectJs(chrome.extension.getURL("inject.js"));
 
+$(window).mouseup(function() {
+	
+	var selection = window.getSelection().toString();
 
+	if (selection.length > 2) {
+		
+		// Skip out if this sniph was recently saved..
+		if (recentSniphs.indexOf(selection) != -1) {
+			console.log('Detected duplicate Sniph (Not saving)');
+			return false;
+		} else {
+			recentSniphs.push(selection);
+		}
+
+		var data = {
+			sniph: {
+				url: document.URL,
+				content: selection
+			}
+		};
+		
+		chrome.extension.sendRequest({'action':'saveSniph', 'data':data}, onSniphSave);
+	}
+
+});
+
+console.log('Sniphr loaded');
