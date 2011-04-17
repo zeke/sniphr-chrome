@@ -4,9 +4,9 @@
   "description": "Sniphr tracks the text you select as you browse the web. Each time you select a piece of text, Sniphr saves it. Think of it as a casual form of bookmarking.",
   "permissions": [
     "http://local.dev/",
-    "http://sniph.heroku.com/",
-    "http://sniph.com/",
-    "http://www.sniph.com/"
+    "http://sniphr.heroku.com/",
+    "http://sniphr.com/",
+    "http://www.sniphr.com/"
   ],
 	// "icons": {
 	// 	"16": "icon16.png",
@@ -15,8 +15,8 @@
 	// },
   "background_page" : "background.html",
   "browser_action": {
-    "default_icon": "nose.gif",
-    "default_title": "Sniph Options",
+    "default_icon": "icon_public.png",
+    "default_title": "Sniphr Options",
     "default_popup": "options.html"
   },
 	"options_page": "options.html",

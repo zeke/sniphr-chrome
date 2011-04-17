@@ -1,6 +1,6 @@
 config = {
-	// host: "http://sniphr.dev/",
-	host: "http://local.dev:3001/",
+	host: "http://sniphr.com/",
+	// host: "http://local.dev:3001/",
 	sniph: {
 		min_length: 3
 	},

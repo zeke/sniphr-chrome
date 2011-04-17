@@ -22,7 +22,6 @@
 				data.sniph.user = localStorage['username'];
 				data.sniph.publique = localStorage['mode'] == 'public';
 				var url = config.host + "sniphs/save.json?" + $.param(data);
-				
 				AjaxRequest(url, callback);
       };
 
