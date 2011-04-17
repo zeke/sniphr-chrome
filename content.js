@@ -3,38 +3,56 @@ recentSniphs = [];
 
 function onSniphSave(data) {
 	if (data == null) {
-		console.log('error: bad response from sniphr.com');
+		log('sniph not saved (bad response)');
 	} else {
-		console.log('Sniph saved!');
-		console.log(data);		
+		log('sniph saved');
+		log(data);
 	}
 }
 
+function highlightSniphs(data) {
+	if (data == null) {
+		log('no sniphs found for this URL');
+	} else {
+		for (i in data) {
+			var sniph = new Sniph(data[i].sniph);
+			sniph.highlight();
+		}
+	}
+}
 
+// Each time the mouse is clicked, check for the presence of selected text
 $(window).mouseup(function() {
 	
-	var selection = window.getSelection().toString();
-
-	if (selection.length > 2) {
+	var selection = getSelectionHtml();
+	
+	// Skip out if the selection is too short..
+	if (selection.length < config.sniph.min_length) return false;
 		
-		// Skip out if this sniph was recently saved..
-		if (recentSniphs.indexOf(selection) != -1) {
-			console.log('Detected duplicate Sniph (Not saving)');
-			return false;
-		} else {
-			recentSniphs.push(selection);
-		}
-
-		var data = {
-			sniph: {
-				url: document.URL,
-				content: selection
-			}
-		};
-		
-		chrome.extension.sendRequest({'action':'saveSniph', 'data':data}, onSniphSave);
+	// Skip out if this sniph was recently saved..
+	if (recentSniphs.indexOf(selection) != -1) {
+		log('duplicate sniph (skip)');
+		return false;
+	} else {
+		recentSniphs.push(selection);
 	}
 
+	// Construct what will become the query string
+	var data = {
+		sniph: {
+			url: document.URL,
+			title: document.title,
+			content: selection
+		}
+	};
+	
+	// Send the request off to background.html, which can make Ajax requests..
+	chrome.extension.sendRequest({'action':'saveSniph', 'data':data}, onSniphSave);
 });
 
-console.log('Sniphr loaded');
+
+// Get the current URL (minues the fragment) and find sniphs that match it..
+var url = document.URL.split("#")[0];
+chrome.extension.sendRequest({'action':'findSniphsForURL', url:url}, highlightSniphs);
+
+log('content.js loaded');

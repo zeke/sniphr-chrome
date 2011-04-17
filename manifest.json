@@ -1,21 +1,28 @@
 {
   "name": "Sniphr",
   "version": "0.1",
-  "description": "I'm up in your chromes, sniffin' your snips!",
+  "description": "Sniphr tracks the text you select as you browse the web. Each time you select a piece of text, Sniphr saves it. Think of it as a casual form of bookmarking.",
   "permissions": [
     "http://local.dev/",
     "http://sniph.heroku.com/",
     "http://sniph.com/",
     "http://www.sniph.com/"
   ],
+	// "icons": {
+	// 	"16": "icon16.png",
+	// 	"48": "icon48.png",
+	// 	"128": "icon128.png"
+	// },
   "background_page" : "background.html",
   "browser_action": {
-    "default_icon": "nose.gif"
+    "default_icon": "nose.gif",
+    "default_title": "Sniph Options",
+    "default_popup": "options.html"
   },
 	"options_page": "options.html",
   "content_scripts": [ {
      "all_frames": true,
-     "js": ["jquery-1.5.1.min.js", "content.js"],
+     "js": ["config.js", "common.js", "jquery-1.5.1.min.js", "sniph.js", "content.js"],
      "matches": [ "<all_urls>" ]
   } ]
 }
