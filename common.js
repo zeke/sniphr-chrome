@@ -51,14 +51,6 @@ function getSelectionHtml() {
 }
 
 var Sniphr = {
-
-	enabled: function() {
-		return localStorage['mode'] != 'disabled';
-	},
-	
-	disabled: function() {
-		return !Sniphr.enabled();
-	}
 	
 };
 

@@ -10,17 +10,7 @@
 
       // Saves a sniph
       function saveSniph(data, callback) {
-				log('saveSniph');
-				
-				if (Sniphr.disabled()) {
-					log('disabled (therefore not saving)')
-					return false;
-				}
-
-				// Content scripts don't have access to localStorage, 
-				// so we're fetching the username from here instead..
-				data.sniph.user = localStorage['username'];
-				data.sniph.publique = localStorage['mode'] == 'public';
+				log('saveSniph');				
 				var url = config.host + "sniphs/save.json?" + $.param(data);
 				AjaxRequest(url, callback);
       };
@@ -28,10 +18,9 @@
       function findSniphsForURL(url, callback) {
 				log('findSniphsForURL ' + url);
 
-				// e.g. 'q=http://example.com/foo&from_user=bob'
+				// e.g. 'q=http://example.com/foo
 				var query = {
-					q: url,
-					from_user: localStorage['username']
+					q: url
 				};
 				var url = config.host + "sniphs.json?" + $.param(query);
 				

@@ -55,4 +55,5 @@ $(window).mouseup(function() {
 var url = document.URL.split("#")[0];
 chrome.extension.sendRequest({'action':'findSniphsForURL', url:url}, highlightSniphs);
 
+// TODO: Insert a node into to page so the site can determine if the extension is installed
 log('content.js loaded');

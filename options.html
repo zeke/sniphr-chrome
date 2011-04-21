@@ -9,11 +9,9 @@
 
 		// Saves options to localStorage.
 		function save_options() {
-		  localStorage["username"] = $('#username').val();
-		  localStorage["mode"] = $('#mode').val();
 
-			// Update icon to reflect mode
-			chrome.browserAction.setIcon({path: 'icon_' + localStorage["mode"] + '.png'});
+			// TODO: Update icon to reflect mode
+      // chrome.browserAction.setIcon({path: 'icon_' + localStorage["mode"] + '.png'});
 
 		  // Update status to let user know options were saved.
 			$('#status').fadeIn();
@@ -25,12 +23,6 @@
 
 		// Restores select box state to saved value from localStorage.
 		function restore_options() {
-		  var username = localStorage["username"];
-		  if (username) $('#username').val(username);
-		
-			// Mode should be set automatically in background.html
-		  var mode = localStorage["mode"];
-			$('#mode').val(mode);
 		}
 
 	</script>
@@ -45,33 +37,9 @@
 			<span class="weak">Options</span>
 		</h2>
 		
-		<form>
-			
-			<ul class="inputs">
-
-				<li class="even">
-					<label for="username">Username</label>
-					<input type="text" id="username" class="text">
-				</li>
-				
-				<li>
-					<label for="mode">Mode</label>
-					<select id="mode">
-						<option value="public">Public</option>
-						<option value="private">Private</option>
-						<option value="disabled">Disabled</option>
-					</select>
-				</li>
-				
-				<li>
-					<a href="#" onclick="save_options(); return false;" id="save_options">Save</a>
-				</li>
-				
-			</ul>
-		
-		</form>
-	
-		<div id="status" style="display:none">Options Saved</div>
+		<p>
+		  Head over to <a href="http://sniphr.com" target="_blank">sniphr.com</a> to edit your account settings.
+		</p>
 
 	</div>
 
