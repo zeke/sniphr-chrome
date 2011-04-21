@@ -12,6 +12,10 @@ Wishlist
 * Allow users to manually check for sniphs on the current page
 * Add a 'cancel' link to options
 * Handle icon style at load time (in case mode is not public)
+* Add a domain blacklist feature
+* OmniAuth?
+
+* Set up auto-updating: http://code.google.com/chrome/extensions/autoupdate.html
 
 Before Releasing
 ----------------

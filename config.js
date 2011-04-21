@@ -5,7 +5,7 @@ config = {
 		min_length: 3
 	},
 	debug: {
-		enabled: true,
+		enabled: false,
 		prepense: "sniphr: "
 	},
 	options: {

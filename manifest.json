@@ -1,18 +1,19 @@
 {
   "name": "Sniphr",
-  "version": "0.1",
-  "description": "Sniphr tracks the text you select as you browse the web. Each time you select a piece of text, Sniphr saves it. Think of it as a casual form of bookmarking.",
+  "version": "1.0",
+  "description": "I'm up in your chromes, sniffin' yr snips!",
+	"homepage_url": "http://sniphr.com",
   "permissions": [
     "http://local.dev/",
     "http://sniphr.heroku.com/",
     "http://sniphr.com/",
     "http://www.sniphr.com/"
   ],
-	// "icons": {
-	// 	"16": "icon16.png",
-	// 	"48": "icon48.png",
-	// 	"128": "icon128.png"
-	// },
+	"icons": {
+		"16": "icon_16.png",
+		"48": "icon_48.png",
+		"128": "icon_128.png"
+	},
   "background_page" : "background.html",
   "browser_action": {
     "default_icon": "icon_public.png",
