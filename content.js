@@ -3,10 +3,9 @@ recentSniphs = [];
 
 function onSniphSave(data) {
 	if (data == null) {
-		log('sniph not saved (bad response)');
+		log('sniph not saved (empty/bad response)');
 	} else {
-		log('sniph saved');
-		log(data);
+		log(data.msg);
 	}
 }
 

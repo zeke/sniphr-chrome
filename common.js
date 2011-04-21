@@ -8,7 +8,6 @@ function log(data) {
 }
 
 function AjaxRequest(url, callback) {
-	log(url);
   this.xhr = new XMLHttpRequest();
 	this.url = url;
 	this.callback = callback;

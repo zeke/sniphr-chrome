@@ -1,10 +1,11 @@
 config = {
-	host: "http://sniphr.com/",
+  host: "http://sniphr.com/",
+  // host: "http://local.dev:3000/",
 	sniph: {
 		min_length: 3
 	},
 	debug: {
-		enabled: false,
+		enabled: true,
 		prepense: "sniphr: "
 	},
 	options: {
