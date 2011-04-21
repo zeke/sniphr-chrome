@@ -10,10 +10,5 @@ config = {
 	},
 	options: {
 		status_fadeout_delay: 2000
-	},
-	localStorage: {
-		defaults: {
-			mode: 'public'
-		}
 	}
 };

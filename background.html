@@ -40,9 +40,6 @@
       };
       chrome.extension.onRequest.addListener(onRequest);
 
-			// Handle localStorage defaults
-			if (!localStorage['mode']) localStorage["mode"] = config.localStorage.defaults.mode;
-
 			log('background.html loaded');
     </script>
   </body>
