@@ -14,9 +14,18 @@
 				var url = config.host + "sniphs/save.json?" + $.param(data);
 				AjaxRequest(url, callback);
       };
+      
+      function notifySniphSaved(sniph) {
+        var notification = webkitNotifications.createNotification('icon_48.png', 'Sniph!', $("<div>" + sniph.content + "</div>").text());
+        notification.show();
+        setTimeout(function(){notification.cancel();}, config.sniph.notification_timeout);
+      }
 
       function findSniphsForURL(url, callback) {
 				log('findSniphsForURL ' + url);
+				
+				// Store the URL so the options page can pass it to its sniphr.com iFRAME
+        localStorage['last_url'] = url
 
 				// e.g. 'q=http://example.com/foo
 				var query = {
@@ -36,6 +45,10 @@
 					case 'findSniphsForURL':
 						findSniphsForURL(request.url, callback);
 						break;
+					case 'notifySniphSaved':
+						notifySniphSaved(request.sniph);
+						break;
+						
 				}
       };
       chrome.extension.onRequest.addListener(onRequest);
