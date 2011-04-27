@@ -15,10 +15,29 @@
 				AjaxRequest(url, callback);
       };
       
+      // Show a notification when sniphs are saved
       function notifySniphSaved(sniph) {
         var notification = webkitNotifications.createNotification('icon_48.png', 'Sniph!', $("<div>" + sniph.content + "</div>").text());
         notification.show();
         setTimeout(function(){notification.cancel();}, config.sniph.notification_timeout);
+      }
+      
+      function getSessionStatus() {
+        log('getSessionStatus')
+				var url = config.host + "session_status.json";
+				AjaxRequest(url, updateIcon);
+      }
+      
+      // If session status Ajax response contains a user,
+      // use user.mode to set icon path. Otherwise show disabled icon.
+      function updateIcon(data) {
+        if (data.user) {
+          path = "icon_" + data.user.mode + ".png";
+        } else {
+          path = "icon_disabled.png";
+        }
+        chrome.browserAction.setIcon({path: path});
+        log('updateIcon: ' + path);
       }
 
       function findSniphsForURL(url, callback) {
@@ -47,6 +66,9 @@
 						break;
 					case 'notifySniphSaved':
 						notifySniphSaved(request.sniph);
+						break;
+					case 'getSessionStatus':
+						getSessionStatus();
 						break;
 						
 				}

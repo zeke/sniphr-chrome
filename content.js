@@ -69,9 +69,18 @@ $(window).mouseup(function() {
 });
 
 
+// Check session status
+chrome.extension.sendRequest({'action':'getSessionStatus'}, function(){});
+
+// (Kick it off a little later so the request doesn't conflict with getSessionStatus)
+// TODO: Figure out why two overlapping Ajax request fuck each other up.
+
 // Get the current URL (minues the fragment) and find sniphs that match it..
 var url = document.URL.split("#")[0];
-chrome.extension.sendRequest({'action':'findSniphsForURL', url:url}, highlightSniphs);
+setTimeout(
+  "chrome.extension.sendRequest({'action':'findSniphsForURL', url:url}, highlightSniphs)",
+  config.sniph.find_sniphs_for_url_delay
+);
 
 // TODO: Insert a node into to page so the site can determine if the extension is installed
 log('content.js loaded');

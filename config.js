@@ -4,10 +4,11 @@ config = {
   // host: "http://local.dev:3000/",
 	sniph: {
 		min_length: 3,
-		notification_timeout: 3500
+		notification_timeout: 3000,
+		find_sniphs_for_url_delay: 2500
 	},
 	debug: {
-		enabled: true,
+		enabled: false,
 		prepense: "sniphr: "
 	},
 	options: {
