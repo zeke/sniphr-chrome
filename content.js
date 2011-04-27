@@ -68,10 +68,14 @@ $(window).mouseup(function() {
 	chrome.extension.sendRequest({'action':'saveSniph', 'data':data}, onSniphSave);
 });
 
-// Get the current URL (minues the fragment) and pass it right away so it will be 
-// available in localStorage whenever the options page is opened.
+// Get the current URL (minues the fragment)
 var url = document.URL.split("#")[0];
-chrome.extension.sendRequest({'action':'logCurrentURL', url:url}, function(){} );
+
+// Unless current URL is the Chrome options page, pass it right away so it will be 
+// available in localStorage whenever the options page is opened.
+if (url.indexOf('chrome_options') == -1) {
+  chrome.extension.sendRequest({'action':'logCurrentURL', url:url}, function(){} );
+}
 
 // Find sniphs that match the current URL
 if (url.indexOf('sniphr.') == -1) {
