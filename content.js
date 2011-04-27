@@ -68,17 +68,23 @@ $(window).mouseup(function() {
 	chrome.extension.sendRequest({'action':'saveSniph', 'data':data}, onSniphSave);
 });
 
+// Get the current URL (minues the fragment) and pass it right away so it will be 
+// available in localStorage whenever the options page is opened.
+var url = document.URL.split("#")[0];
+chrome.extension.sendRequest({'action':'logCurrentURL', url:url}, function(){} );
+
+// Find sniphs that match the current URL
+if (url.indexOf('sniphr.') == -1) {
+  chrome.extension.sendRequest({'action':'findSniphsForURL', url:url}, highlightSniphs);
+} else {
+  log('not going to findSniphsForURL because the url is on the sniphr domain');
+}
 
 // Check session status
-chrome.extension.sendRequest({'action':'getSessionStatus'}, function(){});
-
-// (Kick it off a little later so the request doesn't conflict with getSessionStatus)
+// (Kick it off a little later so the request doesn't conflict with findSniphsForURL)
 // TODO: Figure out why two overlapping Ajax request fuck each other up.
-
-// Get the current URL (minues the fragment) and find sniphs that match it..
-var url = document.URL.split("#")[0];
 setTimeout(
-  "chrome.extension.sendRequest({'action':'findSniphsForURL', url:url}, highlightSniphs)",
+  "chrome.extension.sendRequest({'action':'getSessionStatus'}, function(){});",
   config.sniph.find_sniphs_for_url_delay
 );
 

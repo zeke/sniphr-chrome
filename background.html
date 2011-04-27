@@ -40,12 +40,15 @@
         log('updateIcon: ' + path);
       }
 
+      // Store the URL so the options page can pass it to its sniphr.com iFRAME      
+      function logCurrentURL(url) {
+				log('logCurrentURL ' + url);
+        localStorage['last_url'] = url
+      };      
+
       function findSniphsForURL(url, callback) {
 				log('findSniphsForURL ' + url);
-				
-				// Store the URL so the options page can pass it to its sniphr.com iFRAME
-        localStorage['last_url'] = url
-
+			
 				// e.g. 'q=http://example.com/foo
 				var query = {
 					q: url
@@ -60,6 +63,9 @@
 				switch (request.action) {
 					case 'saveSniph':
 						saveSniph(request.data, callback);
+						break;
+					case 'logCurrentURL':
+						logCurrentURL(request.url);
 						break;
 					case 'findSniphsForURL':
 						findSniphsForURL(request.url, callback);

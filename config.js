@@ -1,7 +1,5 @@
 config = {
   host: "http://sniphr.com/",
-  // host: "http://sniphr.dev/",
-  // host: "http://local.dev:3000/",
 	sniph: {
 		min_length: 3,
 		notification_timeout: 3000,
@@ -12,6 +10,16 @@ config = {
 		prepense: "sniphr: "
 	},
 	options: {
-		status_fadeout_delay: 2000
+		status_fadeout_delay: 2000,
+		width: 400,
+		height: 300
 	}
 };
+
+// Uncomment this line when developing:
+// config.debug.enabled = true;
+
+// Dev mode? Change some stuff..
+if (config.debug.enabled) {
+  config.host = 'http://sniphr.dev/';
+}
