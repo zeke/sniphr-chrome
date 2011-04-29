@@ -66,6 +66,8 @@ $(window).mouseup(function() {
 	
 	// Send the request off to background.html, which can make Ajax requests..
 	chrome.extension.sendRequest({'action':'saveSniph', 'data':data}, onSniphSave);
+	
+	return true;
 });
 
 // Get the current URL (minues the fragment)
