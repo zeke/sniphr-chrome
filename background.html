@@ -10,8 +10,12 @@
 
       // Saves a sniph
       function saveSniph(data, callback) {
-				log('saveSniph');				
+				log('saveSniph');
 				var url = config.host + "sniphs/save.json?" + $.param(data);
+
+				// Not sure why, but the apostrophes don't get URL-encoded by $.param
+				url = url.replace(/'/g, '%27');
+				
 				AjaxRequest(url, callback);
       };
       
