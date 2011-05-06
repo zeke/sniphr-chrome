@@ -1,6 +1,7 @@
 //  Keep track of recents so as not to re-save
 recentSniphs = [];
 holdingShift = false;
+alreadyCreatedContextMenu = false;
 
 function onSniphSave(data) {
   if (data == null) {
@@ -36,9 +37,19 @@ $(window).keyup(function(e) {
   }
 });
 
-// Each time the mouse is clicked, check for the presence of selected text
+chrome.extension.onRequest.addListener(
+  function(request, sender, sendResponse) {
+    switch (request.action) {
+      case 'whiff_forcefully':
+      whiff(true);
+      break;
+    }
+    sendResponse({});
+  }
+);
 
-window.addEventListener("mouseup", function(event) {
+function whiff(force) {
+  log('whiff');
   
   var selection = getSelectionHtml();
   
@@ -46,12 +57,19 @@ window.addEventListener("mouseup", function(event) {
   if (selection.length < config.sniph.min_length && !holdingShift) return false;
     
   // Skip out if this sniph was recently saved..
-  if (recentSniphs.indexOf(selection) != -1 && !holdingShift) {
+  if (recentSniphs.indexOf(selection) != -1 && !holdingShift && !force) {
     log('duplicate sniph (skip)');
     return false;
   } else {
     recentSniphs.push(selection);
   }
+  
+  // There's something sniphable here. 
+  // Tell background.html to add a context menu so user can force a sniph..
+  if (!alreadyCreatedContextMenu) {
+    alreadyCreatedContextMenu = true;
+    chrome.extension.sendRequest({'action':'createContextMenu'}, function() {} ); 
+  }  
 
   // Construct what will become the query string
   var data = {
@@ -62,14 +80,16 @@ window.addEventListener("mouseup", function(event) {
     }
   };
   
-  // Pass a 'force' param if holding down shift
-  if (holdingShift) data.force = true;
+  // Pass a 'force' param if holding down shift (or if called by context menu)
+  if (holdingShift || force) data.force = true;
   
   // Send the request off to background.html, which can make Ajax requests..
   chrome.extension.sendRequest({'action':'saveSniph', 'data':data}, onSniphSave);
   
-  return true;
-});
+}
+
+// Bind the whiff action to mouseup
+window.addEventListener("mouseup", function(){ whiff(); });
 
 // Get the current URL (minues the fragment)
 var url = document.URL.split("#")[0];

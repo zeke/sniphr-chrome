@@ -48,7 +48,25 @@
       function logCurrentURL(url) {
 				log('logCurrentURL ' + url);
         localStorage['last_url'] = url
-      };      
+      };
+
+
+
+
+			function createContextMenu() {
+				log('createContextMenu()');
+				chrome.contextMenus.removeAll();
+				chrome.contextMenus.create({
+			    title: config.context_menu.title,
+			    contexts: ["all"],
+			    onclick: function() {
+						// This is the only way to get the message across to the content script
+						chrome.tabs.getSelected(null, function(tab) {
+						  chrome.tabs.sendRequest(tab.id, {action: "whiff_forcefully"}, function(response) {} );
+						});
+					}
+			  });
+			}
 
       function findSniphsForURL(url, callback) {
 				log('findSniphsForURL ' + url);
@@ -67,6 +85,9 @@
 				switch (request.action) {
 					case 'saveSniph':
 						saveSniph(request.data, callback);
+						break;
+					case 'createContextMenu':
+						createContextMenu();
 						break;
 					case 'logCurrentURL':
 						logCurrentURL(request.url);

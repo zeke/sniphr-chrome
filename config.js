@@ -10,9 +10,11 @@ config = {
 		prepense: "sniphr: "
 	},
 	options: {
-		status_fadeout_delay: 2000,
 		width: 400,
 		height: 300
+	},
+	context_menu: {
+	  title: "Sniph It!"
 	}
 };
 

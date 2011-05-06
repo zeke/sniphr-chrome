@@ -4,6 +4,8 @@
   "description": "Sniphr saves the snippets of text you highlight as you browse around the web. It's the lazy (wo)man's bookmarking tool.",
 	"homepage_url": "http://sniphr.com",
   "permissions": [
+		"tabs",
+		"contextMenus",
     "notifications",
     "http://local.dev/",
     "http://sniphr.heroku.com/",
