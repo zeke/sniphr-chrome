@@ -16,10 +16,6 @@ config = {
 	}
 };
 
-// Uncomment this line when developing:
+// Uncomment these lines when developing locally:
 // config.debug.enabled = true;
-
-// Dev mode? Change some stuff..
-if (config.debug.enabled) {
-  config.host = 'http://sniphr.dev/';
-}
+// config.host = 'http://sniphr.dev/';
