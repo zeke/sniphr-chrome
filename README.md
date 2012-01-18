@@ -1,3 +1,5 @@
+Sniphr Chrome Extension
+=======================
 
 Wishlist
 --------
@@ -6,14 +8,29 @@ Wishlist
 * Allow users to manually check for sniphs on the current page
 * Add more links to options.html
 * Handle icon style at load time and per-page
-* Show a google notification when a sniph is saved
 * Set up auto-updating: http://code.google.com/chrome/extensions/autoupdate.html
 
-Before Releasing
-----------------
+Development
+-----------
 
+Leave this running while developing:
+
+```bash
+coffee --watch --compile --output lib/ src/
+```
+
+* Set `config.debug.enabled` to `true`
+* Update options.html's CSS path
+
+Releases
+--------
+
+A few things to remember when preparing a release:
+
+* Increment the version number
 * Set `config.debug.enabled` to `false`
 * Update options.html's CSS path
+
 
 Gotchas
 -------
