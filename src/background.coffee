@@ -1,15 +1,16 @@
 saveSniph = (data, callback) ->
-  log "saveSniph"
   url = config.host + "sniphs/save.json?" + $.param(data)
   
-  # Not sure why, but the apostrophes don't get URL-encoded by $.param
+  # Not sure why, but apostrophes don't get URL-encoded by $.param
   url = url.replace(/'/g, "%27")
-  
+
+  log "saveSniph: #{url}"
+    
   AjaxRequest url, callback
   
 # Show a notification when sniphs are saved
 notifySniphSaved = (sniph) ->
-  notification = webkitNotifications.createNotification("images/icon_48.png", "Sniph!", $("<div>" + sniph.content + "</div>").text())
+  notification = webkitNotifications.createNotification("images/icon_48.png", "Sniph!", $("<div>#{sniph.content}</div>").text())
   notification.show()
   setTimeout (->
     notification.cancel()
@@ -30,27 +31,24 @@ updateIcon = (data) ->
 
 getCurrentTab = (callback) ->
   chrome.tabs.getSelected null, (tab) ->
-    
+
     # Get the current URL (minus the fragment)
     url = tab.url.split("#")[0]
     
     # Store current URL in localStorage so the options page can access it
     # (Unless current URL is the Chrome options page)
     localStorage["last_url"] = url  if url.indexOf("chrome_options") is -1
-    callback tab
+    callback(tab)
 
 createContextMenu = ->
-  log "createContextMenu()"
   chrome.contextMenus.removeAll()
   chrome.contextMenus.create
     title: config.context_menu.title
     contexts: [ "all" ]
-    onclick: ->
+    onclick: (event) ->
       # This is the only way to get the message across to the content script
       chrome.tabs.getSelected null, (tab) ->
-        chrome.tabs.sendRequest tab.id,
-          action: "whiff_forcefully"
-        , (response) ->
+        chrome.tabs.sendRequest tab.id, {action: "whiffFromContextMenu", event:event}, (response) ->
 
 findSniphsForURL = (url, callback) ->
   log "findSniphsForURL " + url

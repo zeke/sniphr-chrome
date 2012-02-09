@@ -1,3 +1,10 @@
+# Keep track of recents so as not to re-save
+recentSniphs = [] unless recentSniphs?
+
+# Remember the last image that was click on.
+lastImageClicked = null unless lastImageClicked?
+holdingShift = false unless holdingShift?
+
 onSniphSave = (data) ->
   unless data?
     log "sniph not saved (empty/bad response)"
@@ -16,37 +23,29 @@ highlightSniphs = (data) ->
     for i of data
       sniph = new Sniph(data[i].sniph)
       sniph.highlight()
-      
-whiff = (force) ->
-  log "whiff"
-  selection = getSelectionHtml()
+
+whiff = (event) ->
+  # log "whiff event: %o", event
+  selection = getSelectionHtml() or lastImageClicked
+  
+  log "lastImageClicked: %s ", lastImageClicked
+  log "selection: %s", selection
   
   # Skip out if the selection is too short..
-  return false if selection.length < config.sniph.min_length and not holdingShift
+  return false if selection.length < config.sniph.min_length
   
   # Skip out if this sniph was recently saved..
-  if recentSniphs.indexOf(selection) isnt -1 and not holdingShift and not force
+  if (selection in recentSniphs)
     log "duplicate sniph (skip)"
     return false
   else
     recentSniphs.push selection
-    
-  # There's something sniphable here. 
-  # Tell background.html to add a context menu so user can force a sniph..
-  unless alreadyCreatedContextMenu
-    alreadyCreatedContextMenu = true
-    chrome.extension.sendRequest
-      action: "createContextMenu"
-    , ->
       
   # Construct what will become the query string
   data = sniph:
     url: document.URL
     title: document.title
     content: selection
-
-  # Pass a 'force' param if holding down shift (or if called by context menu)
-  data.force = true if holdingShift or force
 
   # Send the request off to background.html, which can make Ajax requests..
   chrome.extension.sendRequest
@@ -55,6 +54,7 @@ whiff = (force) ->
   , onSniphSave
   
 findSniphsForCurrentPage = ->
+  log 'findSniphsForCurrentPage()'
   chrome.extension.sendRequest
     action: "getCurrentTab"
   , (tab) ->
@@ -69,45 +69,48 @@ findSniphsForCurrentPage = ->
       , highlightSniphs
     else
       log "not going to findSniphsForURL because the url is on the sniphr domain"
-      
-getCurrentTab = ->
-  chrome.extension.sendRequest
-    action: "getCurrentTab"
-  , (tab) ->
 
-# Keep track of recents so as not to re-save
-recentSniphs = []
-holdingShift = false
-alreadyCreatedContextMenu = false
+# Proxy this over to background, which can get the current tab
+getCurrentTab = (callback) ->
+  chrome.extension.sendRequest {action: "getCurrentTab"}, callback
 
-$(window).keydown (e) ->
-  holdingShift = true  if e.keyCode is 16
+# Prevent certain code from running repeatedly in all the page's iframes..
+getCurrentTab (tab) ->
+  
+  if document.URL == tab.url
+    log "document.URL == tab.url"
 
-$(window).keyup (e) ->
-  holdingShift = false  if e.keyCode is 16
+    $(window).keydown (e) ->
+      holdingShift = true if e.keyCode is 16
 
-chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
-  switch request.action
-    when "whiff_forcefully"
-      whiff true
-  sendResponse {}
+    $(window).keyup (e) ->
+      holdingShift = false if e.keyCode is 16
+    
+    chrome.extension.onRequest.addListener (request, sender, sendResponse) ->
+      switch request.action
+        when "whiffFromContextMenu"
+          whiff(request.event)
+      sendResponse {}
+  
+    # Bind the whiff action to mouseup
+    $(window).mouseup (event) ->
+      whiff(event) if holdingShift
+  
+    # Peep images:
+    $('img').mousedown (e) ->
+      lastImageClicked = e.target.src
+      log "lastImageClicked: #{lastImageClicked}"
 
-# Bind the whiff action to mouseup
-window.addEventListener "mouseup", ->
-  whiff()
+    # Tell background.html to add a context menu
+    chrome.extension.sendRequest {action: "createContextMenu"}
 
-# Get the current tab any time one takes focus
-window.addEventListener "focus", ->
-  getCurrentTab()
+    # findSniphsForCurrentPage()
+    
+    # Get the current tab any time one takes focus
+    window.addEventListener "focus", ->
+      getCurrentTab()
 
-# Get the current tab on page load
-getCurrentTab()
-
-findSniphsForCurrentPage()
-
-# Check session status
-# (Kick it off a little later so the request doesn't conflict with findSniphsForURL)
-# TODO: Figure out why two overlapping Ajax requests fuck each other up.
-setTimeout "chrome.extension.sendRequest({'action':'getSessionStatus'}, function(){});", config.sniph.find_sniphs_for_url_delay
-
-# TODO: Insert a node into to page so the site can determine if the extension is installed
+    # Check session status
+    # (Kick it off a little later so the request doesn't conflict with findSniphsForURL)
+    # TODO: Figure out why two overlapping Ajax requests fuck each other up.
+    setTimeout "chrome.extension.sendRequest({'action':'getSessionStatus'}, function(){});", config.sniph.find_sniphs_for_url_delay
