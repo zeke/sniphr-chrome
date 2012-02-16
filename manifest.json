@@ -1,13 +1,12 @@
 {
   "name": "Sniphr",
-  "version": "1.8",
+  "version": "1.8.01",
   "description": "Sniphr is a Google Chrome extension that lets you save snippets of text from the web. Think of it as friction-free bookmarking.",
 	"homepage_url": "http://sniphr.com",
   "permissions": [
 		"tabs",
 		"contextMenus",
     "notifications",
-    "http://local.dev/",
     "http://sniphr.heroku.com/",
     "http://sniphr.com/",
     "http://sniphr.dev/",
