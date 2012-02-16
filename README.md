@@ -1,26 +1,23 @@
 Sniphr Chrome Extension
 =======================
 
-Wishlist
---------
+This is the source code for the sniphr.com chrome extension.
 
-* Save "instance number" if selected text occurs multiple times on the page?
-* Allow users to manually check for sniphs on the current page
-* Add more links to options.html
-* Handle icon style at load time and per-page
-* Set up auto-updating: http://code.google.com/chrome/extensions/autoupdate.html
+* Check out [sniphr.com](http://sniphr.com).
+* Report bugs on the [pivotal](https://www.pivotaltracker.com/projects/473843) project.
 
 Development
 -----------
 
-Leave this running while developing:
+The only development dependency is the CoffeeScript compiler. To install it, 
+check out [coffeescript.org/#installation](http://coffeescript.org/#installation)
 
 ```bash
-coffee --watch --compile --output lib/ src/
+# Watch the /src dir for changes and autocompile them to /lib
+coffee -o lib/ -cw src/
 ```
 
 * Set `config.debug.enabled` to `true`
-* Update options.html's CSS path
 
 Releases
 --------
@@ -30,7 +27,6 @@ A few things to remember when preparing a release:
 * Increment the version number
 * Set `config.debug.enabled` to `false`
 * Update options.html's CSS path
-
 
 Gotchas
 -------
