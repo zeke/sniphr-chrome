@@ -23,11 +23,10 @@ highlightSniphs = (data) ->
       sniph.highlight()
 
 whiff = (event) ->
-  # log "whiff event: %o", event
-  selection = getSelectionHtml() or lastImageClicked
   
-  log "lastImageClicked: %s", lastImageClicked
-  log "selection: %s", selection
+  # Look for selected text. If none is found use the URL 
+  # of the most recently clicked image.
+  selection = getSelectionHtml() or lastImageClicked
   
   # Skip out if the selection is too short..
   return false if selection.length < config.sniph.min_length
