@@ -9,12 +9,10 @@ onSniphSave = (data) ->
   unless data?
     log "sniph not saved (empty/bad response)"
   else
-    log data.msg
     if data.msg.toLowerCase() is "success"
       chrome.extension.sendRequest
         action: "notifySniphSaved"
         sniph: data.sniph
-      , ->
         
 highlightSniphs = (data) ->
   unless data?
@@ -28,7 +26,7 @@ whiff = (event) ->
   # log "whiff event: %o", event
   selection = getSelectionHtml() or lastImageClicked
   
-  log "lastImageClicked: %s ", lastImageClicked
+  log "lastImageClicked: %s", lastImageClicked
   log "selection: %s", selection
   
   # Skip out if the selection is too short..
@@ -72,13 +70,14 @@ findSniphsForCurrentPage = ->
 
 # Proxy this over to background, which can get the current tab
 getCurrentTab = (callback) ->
-  chrome.extension.sendRequest {action: "getCurrentTab"}, callback
+  chrome.extension.sendRequest
+    action: "getCurrentTab"
+    , callback
 
 # Prevent certain code from running repeatedly in all the page's iframes..
 getCurrentTab (tab) ->
   
   if document.URL == tab.url
-    log "document.URL == tab.url"
 
     $(window).keydown (e) ->
       holdingShift = true if e.keyCode is 16
@@ -102,13 +101,15 @@ getCurrentTab (tab) ->
       log "lastImageClicked: #{lastImageClicked}"
 
     # Tell background.html to add a context menu
-    chrome.extension.sendRequest {action: "createContextMenu"}
+    chrome.extension.sendRequest
+      action: "createContextMenu"
 
     # findSniphsForCurrentPage()
     
     # Get the current tab any time one takes focus
     window.addEventListener "focus", ->
-      getCurrentTab()
+      getCurrentTab (tab) ->
+        # Don't do anything.
 
     # Check session status
     # (Kick it off a little later so the request doesn't conflict with findSniphsForURL)

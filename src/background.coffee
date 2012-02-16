@@ -62,15 +62,16 @@ findSniphsForURL = (url, callback) ->
 onRequest = (request, sender, callback) ->
   switch request.action
     when "saveSniph"
-      saveSniph request.data, callback
+      saveSniph(request.data, callback)
     when "createContextMenu"
       createContextMenu()
     when "getCurrentTab"
-      getCurrentTab callback
+      log 'bout to get that current tab'
+      getCurrentTab(callback)
     when "findSniphsForURL"
-      findSniphsForURL request.url, callback
+      findSniphsForURL(request.url, callback)
     when "notifySniphSaved"
-      notifySniphSaved request.sniph
+      notifySniphSaved(request.sniph)
     when "getSessionStatus"
       getSessionStatus()
 

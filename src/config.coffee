@@ -14,7 +14,7 @@ config =
     height: 300
 
   context_menu:
-    title: "Sniph It!"
+    title: "Sniph"
 
 # config.debug.enabled = true
 # config.host = "http://sniphr.dev/"
