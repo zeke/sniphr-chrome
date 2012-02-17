@@ -16,6 +16,7 @@ config =
   context_menu:
     title: "Sniph"
 
+# Uncomment these lines when developing..
 # config.debug.enabled = true
 # config.host = "http://sniphr.dev/"
 
