@@ -15,9 +15,8 @@ check out [coffeescript.org/#installation](http://coffeescript.org/#installation
 ```bash
 # Watch the /src dir for changes and autocompile them to /lib
 coffee -o lib/ -cw src/
-```
 
-* Set `config.debug.enabled` to `true`
+To enable console debugging, edit `src/config.coffee`.
 
 Git Pivotal
 -----------

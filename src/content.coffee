@@ -23,13 +23,14 @@ highlightSniphs = (data) ->
       sniph.highlight()
 
 whiff = (event) ->
+  log 'whiff'
   
   # Look for selected text. If none is found use the URL 
   # of the most recently clicked image.
   selection = getSelectionHtml() or lastImageClicked
   
-  # Skip out if the selection is too short..
-  return false if selection.length < config.sniph.min_length
+  # Skip out if the selection missing or too short..
+  return false unless selection? and selection.length >= config.sniph.min_length
   
   # Skip out if this sniph was recently saved..
   if (selection in recentSniphs)
@@ -37,7 +38,11 @@ whiff = (event) ->
     return false
   else
     recentSniphs.push selection
-      
+
+  # If an IMG inside an A was SHIFT-clicked, prevent the click event from firing.
+  event.preventDefault()
+  event.stopPropagation()
+
   # Construct what will become the query string
   data = sniph:
     url: document.URL
@@ -89,16 +94,23 @@ getCurrentTab (tab) ->
         when "whiffFromContextMenu"
           whiff(request.event)
       sendResponse {}
-  
-    # Bind the whiff action to mouseup
-    $(window).mouseup (event) ->
-      whiff(event) if holdingShift
-  
-    # Peep images:
+      
+    # Take note of image URLs before the 'mouseup' and 'click' events.
     $('img').mousedown (e) ->
       lastImageClicked = e.target.src
       log "lastImageClicked: #{lastImageClicked}"
-
+  
+    # The 'click' event is not fired upon text selection, so detect mouseup.
+    $(window).mouseup (event) ->
+      whiff(event) if holdingShift
+      
+    # In some cases this is a superfluous whiff, as the whiffing done by the
+    # preceding 'mouseup' saves the sniph. But we still need to capture
+    # 'click' events so as to stop event propagation of links with images in 
+    # them that have been shift-clicked.
+    $(window).click (event) ->
+      whiff(event) if holdingShift
+  
     # Tell background.html to add a context menu
     chrome.extension.sendRequest
       action: "createContextMenu"
