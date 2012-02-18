@@ -17,7 +17,7 @@ config =
     title: "Sniph"
 
 # Uncomment these lines when developing..
-# config.debug.enabled = true
+config.debug.enabled = true
 # config.host = "http://sniphr.dev/"
 
 window.config = config
