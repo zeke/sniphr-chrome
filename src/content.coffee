@@ -40,7 +40,9 @@ whiff = (event) ->
     recentSniphs.push selection
 
   # If an IMG inside an A was SHIFT-clicked, prevent the click event from firing.
-  event.stopPropagation()
+  if event.cancelable
+    event.preventDefault()
+    event.stopPropagation()
 
   # Construct what will become the query string
   data = sniph:
